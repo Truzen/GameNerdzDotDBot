@@ -1,0 +1,35 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+
+WEBSITE_URL = 'https://www.gamenerdz.com/deal-of-the-day'
+
+PRODUCT_NAME_SELECTOR = '.store-pass-product-name'
+PRODUCT_PRICE_SELECTOR = '.store-pass-product-price'
+PRODUCT_MSRP_SELECTOR = '.store-pass-product-msrp'
+
+try:
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get(WEBSITE_URL)
+    time.sleep(5) #give time for dynamic content to load.
+
+    product_name_element = driver.find_element(By.CSS_SELECTOR, PRODUCT_NAME_SELECTOR)
+    price_element = driver.find_element(By.CSS_SELECTOR, PRODUCT_PRICE_SELECTOR)
+    msrp_element = driver.find_element(By.CSS_SELECTOR, PRODUCT_MSRP_SELECTOR)
+    newString = ""
+
+    current_product_name = product_name_element.text.strip()
+    current_price = price_element.text.strip()
+    current_msrp = msrp_element.text.strip()
+    for letter in current_msrp:
+        newString += letter + "\u0336"
+    current_msrp = newString
+
+    print(f"{current_product_name}, {current_price}, {current_msrp}")
+
+    driver.quit()
+
+except Exception as e:
+    print(f"Failure with {e} error")
